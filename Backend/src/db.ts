@@ -1,45 +1,93 @@
-import mongoose, { Types } from "mongoose"; 
- const Schema = mongoose.Schema ; 
-  
-  export interface IUser {   // 
-       name : string 
-       phoneNumber   : string 
-       email: string 
-      password  : string 
- } 
 
-  export interface IMessage { 
-      senderId : Types.ObjectId ; 
-      receiverId : Types.ObjectId ; 
-      text  : string  
+import mongoose, { Types } from "mongoose";
+
+const Schema = mongoose.Schema;
+
+export interface IUser {
+  _id?: Types.ObjectId;
+  name: string;
+  phoneNumber: string;
+  email?: string;
+  password: string;
+}
+
+const UserSchema = new Schema<IUser>(
+  {
+    name: { type: String, required: true },
+
+    phoneNumber: {
+      type: String,
+      required: true,
+      unique: true   // identity
+    },
+
+    email: {
+      type: String,
+      unique: true,
+      sparse: true
+    },
+
+    password: {
+      type: String,
+      required: true
     }
+  },
+  { timestamps: true }
+);
 
-const User = new Schema<IUser>({
-     name : { type : String , required : true }  , 
-     phoneNumber : { 
-          type : String  , 
-           required : true  
-     },
-
-     email : { type : String , unique : true } ,
-     password : { type : String , unique : true }
-} , 
+export const UserModel = mongoose.model<IUser>("User",UserSchema);
+export interface IChat {
+  _id?: Types.ObjectId;
+  members: Types.ObjectId[];   // exactly 2 users
  
- { timestamps: true }
- 
-)  
+}
 
-const Message = new Schema<IMessage> ({
-         senderId : { type : Types.ObjectId  ,unique : true  , ref : "User"}, 
-         receiverId  : { type : Types.ObjectId , unique : true , ref : "User"} ,
-         text  : { type  :String },
-        
-}, 
-{ timestamps: true } 
-)
+const ChatSchema = new Schema<IChat>(
+  {
+    members: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true
+      } 
+    ],
+     
+  },
 
- export const UserModel = mongoose.model<IUser>("users" , User) ;
- export const MessageModel = mongoose.model<IMessage>("messages" ,Message) ;
+  { timestamps: true } 
+   
+);
 
-// ================= Models ================= // 
+export const ChatModel = mongoose.model<IChat>("Chat", ChatSchema);
 
+export interface IMessage {
+  _id?: Types.ObjectId;
+  chatId: Types.ObjectId;
+  senderId: Types.ObjectId;
+  text: string;
+}
+
+const MessageSchema = new Schema<IMessage>(
+  {
+    chatId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Chat",
+      required: true
+    },
+
+    senderId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true
+    },
+
+    text: {
+      type: String,
+      required: true
+    }
+  },
+  
+  { timestamps: true }
+);
+
+export const MessageModel = mongoose.model<IMessage>("Message", MessageSchema);
