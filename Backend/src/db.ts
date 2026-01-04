@@ -32,10 +32,11 @@ const UserSchema = new Schema<IUser>(
       required: true
     }
   },
-  { timestamps: true }
+  {timestamps: true}
 );
 
 export const UserModel = mongoose.model<IUser>("User",UserSchema);
+
 export interface IChat {
   _id?: Types.ObjectId;
   members: Types.ObjectId[];   // exactly 2 users
@@ -51,7 +52,7 @@ const ChatSchema = new Schema<IChat>(
         required: true
       } 
     ],
-     
+
   },
 
   { timestamps: true } 
@@ -86,7 +87,7 @@ const MessageSchema = new Schema<IMessage>(
       required: true
     }
   },
-  
+
   { timestamps: true }
 );
 
