@@ -46,6 +46,30 @@ const process = requiredBody.safeParse(req.body) ;
   res.json({message : "You have loged in Succesfully"}) ;
 
  }) ;
+
+app.post("/api/v1/signin" , async(req:Request , res:Response)=>{
+   const requiredBody = z.object({
+      name: z.string().min(4).max(20),
+ phoneNumber: z.string().length(10) ,
+ email : z.string().min(5) ,
+ password :z.string().min(5).max(25) 
+   })
+    const process = requiredBody.safeParse(req.body) ;
+    if(!process.success) {
+       res.json({
+          message : "Incorrect Formate" 
+       })
+    } 
+   const {name , phoneNumber , email , password} = req .body ;
+    const existingUser = await UserModel.find({name})
+    if(existingUser){
+       //@ts-ignore
+       const token = jwt.sign({id:existingUser._id} , JWT) ;
+       res.json({token}) ;
+    }else {
+       res.status(403).json({message :"Incorrect credentials"}) ;
+    }
+})
 app.listen(3000, () => {
   console.log(" Server running on http://localhost:3000");
 });  
