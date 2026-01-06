@@ -11,7 +11,8 @@ export const useMiddleware = async (req:Request ,res :Response)=> {
          req.userId = decode.id ; 
          //@ts-ignore
          next() ;
-     } else {
+     } else { 
                  res.status(401).json({ message: "Unauthorized User" });
      }
 }
+// here how it work 

@@ -1,1 +1,1 @@
-export const JWT = 'dsmlklfs'; 
+export const JWT = 'dsmlklfs';
