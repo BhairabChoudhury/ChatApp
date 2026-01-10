@@ -12,7 +12,7 @@ export const useMiddleware = async (req:Request ,res :Response)=> {
          //@ts-ignore
          next() ;
      } else { 
-                 res.status(401).json({ message: "Unauthorized User" });
+        res.status(401).json({ message: "Unauthorized User" });
      }
 }
 // here how it work 

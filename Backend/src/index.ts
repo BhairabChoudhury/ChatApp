@@ -1,4 +1,6 @@
-import { Express } from "express"; 
+
+//@ts-ignore
+import  express  from "express"; 
 import { Request, Response } from "express"; 
 import mongoose  from "mongoose"; 
 import jwt from "jsonwebtoken" ; 
@@ -8,12 +10,16 @@ import {JWT} from './config' ;
 import cors from "cors" ; 
 import { UserModel , ChatModel , MessageModel } from "./db";
 // @ts-ignore
-const app = Express(); 
- mongoose.connect("mongodb+srv://Rocky:8101866244@cluster0.ey9q8vn.mongodb.net/Brainly-Project" )
+const app = express(); 
+app.use(express.json()) ; 
+/**
+ app.use(express.json()); is a built-in middleware function in Express.js used to parse incoming request bodies with JSON payloads. Without it, data sent to the server in JSON format (e.g., in a POST or PUT request) would be raw and inaccessible in the req.body property. 
+ */
+ mongoose.connect("mongodb+srv://Rocky:8101866244@cluster0.ey9q8vn.mongodb.net/ChatApp" )
  .then(()=>console.log("Mongo Db successfully Conected "))
  .catch(err=>console.log("error catch",err)) ;
 
- app.post("/api/vi/signup" , async(req:Request , res :Response)=>{
+ app.post("/api/v1/signup" , async(req:Request , res :Response)=>{
   
  const  requiredBody = z.object({
  name: z.string().min(4).max(20),
@@ -53,7 +59,8 @@ app.post("/api/v1/signin" , async(req:Request , res:Response)=>{
  phoneNumber: z.string().length(10) ,
  email : z.string().min(5) ,
  password :z.string().min(5).max(25) 
-   })
+   }) 
+   console.log("My nam is the  Bhairab") ;
     const process = requiredBody.safeParse(req.body) ;
     if(!process.success) {
        res.json({
